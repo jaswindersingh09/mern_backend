@@ -12,13 +12,33 @@ const adminRoute = require("./router/admin-router")
 const errorMiddleware = require("./middleware/error-middleware");
 
 
-const corsOptions = {
-  origin: "http://localhost:5173",
+// const corsOptions = {
+//   origin: "http://localhost:5173",
+//   methods: "GET, POST, PUT, PATCH, DELETE, HEAD",
+//   credentials: true
+// }
+
+// app.use(cors(corsOptions))
+
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://ubiquitous-banoffee-c23539.netlify.app'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: "GET, POST, PUT, PATCH, DELETE, HEAD",
   credentials: true
-}
+}));
 
-app.use(cors(corsOptions))
+
 
 app.use(express.json());
 
